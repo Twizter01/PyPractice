@@ -1,0 +1,29 @@
+# Basic Aritmetic calculator
+
+
+def calculate():
+    print("Welcome to your basic arithmetic calculator!\n")
+    print("Please choose an operator by selecting a number from 1 to 4")
+    print("1 = addition, 2 = subtraction, 3 = multiplication, 4 = division")
+    
+    x = int(input("What's x or your first number: "))
+    operator = int(input("What do you need to do? Please choose a number (1-4): "))
+    y = int(input("What's y or your second number: "))
+    
+    if operator == 1:
+        return x + y
+    elif operator == 2:
+        return x - y
+    elif operator == 3:
+        return x * y
+    elif operator == 4:
+        if y == 0:
+            return "Error: Cannot divide by zero."
+        else:
+            return x / y
+    else:
+        return "Invalid operator selected."
+
+# The function is called without arguments because the input is handled inside.
+result = calculate()
+print(f"Your result is: {result}")
