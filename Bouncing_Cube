@@ -1,0 +1,105 @@
+import turtle
+import colorsys
+import math
+
+# Set up the screen
+screen = turtle.Screen()
+screen.title("Rotating Bouncing Cube with Retro Colors")
+screen.bgcolor("black")
+screen.tracer(0)  # Manual updates for performance
+
+# Set up the turtle
+pointer = turtle.Turtle()
+pointer.speed(0)
+pointer.pensize(2)
+pointer.hideturtle()
+
+# Define cube vertices (front and back squares connected)
+vertices = [
+    (-50, -50), (50, -50), (50, 50), (-50, 50),  # Front face
+    (-30, -30), (70, -30), (70, 70), (-30, 70)    # Back face
+]
+edges = [
+    (0, 1), (1, 2), (2, 3), (3, 0),  # Front edges
+    (4, 5), (5, 6), (6, 7), (7, 4),  # Back edges
+    (0, 4), (1, 5), (2, 6), (3, 7)   # Connecting edges
+]
+
+# Function to compute rotated vertices around the cube's center
+def compute_rotated_vertices(theta):
+    cx, cy = 10, 10  # Approximate center of the cube
+    rotated = []
+    for x, y in vertices:
+        dx = x - cx
+        dy = y - cy
+        x_rot = cx + dx * math.cos(theta) - dy * math.sin(theta)
+        y_rot = cy + dx * math.sin(theta) + dy * math.cos(theta)
+        rotated.append((x_rot, y_rot))
+    return rotated
+
+# Function to determine saturation and value for retro effect
+def get_sv(bounce_count):
+    if bounce_count == 0:    # Initial fall
+        return 1.0, 1.0      # Bright, vibrant colors
+    elif bounce_count == 1:  # After first bounce
+        return 0.8, 0.9
+    elif bounce_count == 2:  # After second bounce
+        return 0.6, 0.8
+    else:                    # After third bounce and beyond
+        return 0.5, 0.7      # Muted, retro pastel tones
+
+# Function to draw the cube with bounce-dependent colors
+def draw_cube(rotated_vertices, y_offset, bounce_count):
+    shifted_vertices = [(x, y + y_offset) for x, y in rotated_vertices]
+    for idx, (i, j) in enumerate(edges):
+        hue = idx / 12.0  # Cycle hues across 12 edges
+        sat, val = get_sv(bounce_count)
+        rgb = colorsys.hsv_to_rgb(hue, sat, val)
+        draw_line(shifted_vertices[i], shifted_vertices[j], rgb)
+
+# Function to draw a line with a specified color
+def draw_line(start, end, color):
+    pointer.penup()
+    pointer.goto(start)
+    pointer.pendown()
+    pointer.pencolor(color)
+    pointer.goto(end)
+
+# Initial animation variables
+theta = 0        # Rotation angle
+y_offset = 300   # Starting height
+velocity = 0     # Initial velocity
+gravity = -0.5   # Gravity acceleration
+damping = 0.7    # Bounce energy loss
+bounce_count = 0 # Number of bounces
+
+# Animation loop
+def animate():
+    global theta, y_offset, velocity, bounce_count
+    pointer.clear()  # Clear previous frame
+    rotated_vertices = compute_rotated_vertices(theta)
+    min_y = min(y for x, y in rotated_vertices)  # Lowest point of cube
+    
+    # Collision with ground (y = -200)
+    if min_y + y_offset <= -200:
+        y_offset = -200 - min_y  # Snap to ground
+        velocity = -velocity * damping  # Reverse and dampen velocity
+        bounce_count += 1  # Increment bounce counter
+    else:
+        y_offset += velocity  # Update position
+        velocity += gravity   # Apply gravity
+    
+    # Draw cube with current state
+    draw_cube(rotated_vertices, y_offset, bounce_count)
+    screen.update()
+    
+    # Rotate only if fewer than 3 bounces
+    if bounce_count < 3:
+        theta += 0.02  # Rotation speed
+    
+    # Continue animation
+    screen.ontimer(animate, 20)
+
+# Start animation
+animate()
+screen.mainloop()
