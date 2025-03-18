@@ -1,0 +1,26 @@
+ Text Humanizer
+
+## Overview
+Text Humanizer is a Python program that transforms robotic or formal text into more natural, human-like conversation. It adds casual phrases, applies contractions, and uses natural transitions to make text sound like it came from a real person.
+
+## Features
+- Converts formal phrases to contractions (e.g., "is not" → "isn't")
+- Adds casual conversational elements (e.g., "you know", "kinda")
+- Includes natural transitions (e.g., "So", "By the way")
+- Preserves original punctuation and sentence structure
+- Interactive command-line interface
+- Converts text into
+
+## Requirements
+- Python 3.x
+- No external dependencies needed
+
+## Installation
+1. Clone or download the repository
+2. Ensure Python 3 is installed on your system
+3. Run the script using: `python text_humanizer.py`
+
+## Usage
+1. Run the program:
+```bash
+python text_humanizer.py+
