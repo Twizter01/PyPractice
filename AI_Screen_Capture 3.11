@@ -1,0 +1,41 @@
+import mss
+import pyautogui
+import cv2 as cv
+import numpy as np
+import time
+
+# variables to print the screen dimensions
+w, h = pyautogui.size()
+print("Screen Resolution: " + "w:" + str(w) + " " + "h:" + str(h))
+
+# create a variable to store the screen capture (memory)
+img = None
+monitor = {"top": 0, "left": 0, "width": w, "height": h}
+
+# Framerate for the screen capture
+t0 = time.time()
+n_frames = 1
+
+# Create a loop in order to constantly capture the screen
+with mss.mss() as sct:
+     while True:
+        img = sct.grab((0, 0, w, h))
+        img = np.array(img)
+        
+        small  = cv.resize(img, (0, 0), fx=0.5, fy=0.5) # screen capture re-size
+
+        cv.imshow("Computer Vision", small)
+
+        key = cv.waitKey(1)
+        if key == ord('q'):
+            break
+        elapsed_time = time.time() - t0
+        fps = (n_frames / elapsed_time)
+        print("FPS: " + str(fps))
+        n_frames += 1
+
+cv.destroyAllWindows()
+
+
+
+
