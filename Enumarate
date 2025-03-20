@@ -1,0 +1,12 @@
+from itertools import batched
+
+names = ['Emmy','Roland','Yayo','Leila','Puffer','Fucker','tushui','Amarillo',]
+
+for i, name in enumerate(names, start=0):
+    print(f"{i}.{name}")
+
+
+namess = ['Emmy','Roland','Yayo','Leila','Puffer','Fucker','tushui','Amarillo',]     
+
+namess_batch = batched(namess, 2)
+print(list(namess_batch))
