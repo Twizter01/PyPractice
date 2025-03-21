@@ -1,0 +1,192 @@
+// Say Hello to LFR1-A0, the light following robot that dreamed of being a bug
+
+#define LEFT_LDR A0
+#define RIGHT_LDR A1
+#define LEFT_MOTOR_EN 3
+#define LEFT_MOTOR_IN1 4
+#define LEFT_MOTOR_IN2 5
+#define RIGHT_MOTOR_EN 9
+#define RIGHT_MOTOR_IN1 6
+#define RIGHT_MOTOR_IN2 7
+
+void setup() {
+  pinMode(LEFT_LDR, INPUT);
+  pinMode(RIGHT_LDR, INPUT);
+  pinMode(LEFT_MOTOR_EN, OUTPUT);
+  pinMode(LEFT_MOTOR_IN1, OUTPUT);
+  pinMode(LEFT_MOTOR_IN2, OUTPUT);
+  pinMode(RIGHT_MOTOR_EN, OUTPUT);
+  pinMode(RIGHT_MOTOR_IN1, OUTPUT);
+  pinMode(RIGHT_MOTOR_IN2, OUTPUT);
+}
+
+void loop() {
+  int leftLight = analogRead(LEFT_LDR);
+  int rightLight = analogRead(RIGHT_LDR);
+  int threshold = 50; // Sensitivity threshold
+
+  if (abs(leftLight - rightLight) < threshold) {
+    moveForward();
+  } else if (leftLight > rightLight) {
+    turnLeft();
+  } else {
+    turnRight();
+  }
+}
+
+void moveForward() {
+  digitalWrite(LEFT_MOTOR_IN1, HIGH);
+  digitalWrite(LEFT_MOTOR_IN2, LOW);
+  analogWrite(LEFT_MOTOR_EN, 200);
+  digitalWrite(RIGHT_MOTOR_IN1, HIGH);
+  digitalWrite(RIGHT_MOTOR_IN2, LOW);
+  analogWrite(RIGHT_MOTOR_EN, 200);
+}
+
+void turnLeft() {
+  digitalWrite(LEFT_MOTOR_IN1, HIGH);
+  digitalWrite(LEFT_MOTOR_IN2, LOW);
+  analogWrite(LEFT_MOTOR_EN, 100);
+  digitalWrite(RIGHT_MOTOR_IN1, HIGH);
+  digitalWrite(RIGHT_MOTOR_IN2, LOW);
+  analogWrite(RIGHT_MOTOR_EN, 200);
+}
+
+void turnRight() {
+  digitalWrite(LEFT_MOTOR_IN1, HIGH);
+  digitalWrite(LEFT_MOTOR_IN2, LOW);
+  analogWrite(LEFT_MOTOR_EN, 200);
+  digitalWrite(RIGHT_MOTOR_IN1, HIGH);
+  digitalWrite(RIGHT_MOTOR_IN2, LOW);
+  analogWrite(RIGHT_MOTOR_EN, 100);
+}
+
+
+
+
+//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&//#$%@^!@()&^%&
+
+
+#include <avr/sleep.h>
+
+/* Global variables accessed from ISRs */
+volatile bool sleepModeState = false;  // false = active, true = sleep
+
+/* Constants used for Arduino pins */
+const byte startStopBtnPin = 2,
+           rghtPhotoResPin = A2,
+           leftPhotoResPin = A3,
+           driverEnablePin = 7,
+           rghtMotorPin[] = {4, 5},   // D4, D5
+           leftMotorPin[] = {14, 15}; // A0, A1
+
+void setup() {
+  /* Output pins */
+  pinMode(driverEnablePin, OUTPUT); // D7
+  pinMode(LED_BUILTIN, OUTPUT);     // 13
+  pinMode(leftMotorPin[0], OUTPUT); // A0
+  pinMode(leftMotorPin[1], OUTPUT); // A1
+  pinMode(rghtMotorPin[0], OUTPUT); // D4
+  pinMode(rghtMotorPin[1], OUTPUT); // D5
+  
+  /* Input pins */
+  pinMode(rghtPhotoResPin, INPUT_PULLUP);
+  pinMode(leftPhotoResPin, INPUT_PULLUP);
+  pinMode(startStopBtnPin, INPUT_PULLUP);
+  
+  /* Configuring external hardware interrupts */
+  attachInterrupt(digitalPinToInterrupt(startStopBtnPin), startStopBtnPressed, FALLING);
+  
+  Serial.begin(115200);
+}
+
+void loop() {
+  if (sleepModeState == false) { // Active mode (chasing light)
+    signed rghtPhotoResVal = 1023 - analogRead(rghtPhotoResPin);
+    signed leftPhotoResVal = 1023 - analogRead(leftPhotoResPin);
+    signed photoResDiffVal = abs(leftPhotoResVal - rghtPhotoResVal);
+
+    Serial.print("Left LDR: ");
+    Serial.print(leftPhotoResVal);
+    Serial.print("\tRight LDR: ");
+    Serial.print(rghtPhotoResVal);
+    Serial.print("\tLDR Diff: ");
+    Serial.print(photoResDiffVal);
+    Serial.print("\tMode: CHASE");
+    Serial.print("\tAction: ");
+    
+    digitalWrite(driverEnablePin, HIGH);
+    
+    if (photoResDiffVal <= 10 && leftPhotoResVal > 800 && rghtPhotoResVal > 800) {
+      driveForward();
+    } 
+    else if (photoResDiffVal > 10 && leftPhotoResVal > rghtPhotoResVal && 
+             leftPhotoResVal > 800 && rghtPhotoResVal > 800) {
+      turnLeft();
+    } 
+    else if (photoResDiffVal > 10 && rghtPhotoResVal > leftPhotoResVal && 
+             rghtPhotoResVal > 800 && leftPhotoResVal > 800) {
+      turnRight();
+    } 
+    else {
+      stop();
+    }
+  } 
+  else { // Sleep mode
+    digitalWrite(driverEnablePin, LOW);
+    Serial.print("Sleeping...\n");
+    goToSleep();
+  }
+}
+
+void goToSleep() {
+  byte adcsra = ADCSRA; // Save ADC state
+  ADCSRA = 0;           // Disable ADC
+  set_sleep_mode(SLEEP_MODE_IDLE);
+  cli();                // Stop interrupts
+  sleep_enable();
+  sleep_bod_disable();  // Disable brown-out detection
+  sei();                // Enable interrupts
+  sleep_cpu();          // Enter sleep
+  sleep_disable();      // Wake up
+  ADCSRA = adcsra;      // Restore ADC state
+}
+
+// ISR for start/stop button
+void startStopBtnPressed() {
+  sleepModeState = !sleepModeState;
+}
+
+// Controles para los motores
+void stop() {
+  digitalWrite(leftMotorPin[1], LOW);
+  digitalWrite(leftMotorPin[0], LOW);
+  digitalWrite(rghtMotorPin[1], LOW);
+  digitalWrite(rghtMotorPin[0], LOW);
+  Serial.println("Stop");
+}
+
+void driveForward() {
+  digitalWrite(leftMotorPin[1], LOW);
+  digitalWrite(leftMotorPin[0], HIGH);
+  digitalWrite(rghtMotorPin[1], HIGH);
+  digitalWrite(rghtMotorPin[0], LOW);
+  Serial.println("Forward");
+}
+
+void turnRight() {
+  digitalWrite(leftMotorPin[1], LOW);
+  digitalWrite(leftMotorPin[0], HIGH);
+  digitalWrite(rghtMotorPin[1], LOW);
+  digitalWrite(rghtMotorPin[0], LOW);
+  Serial.println("Right");
+}
+
+void turnLeft() {
+  digitalWrite(leftMotorPin[1], LOW);
+  digitalWrite(leftMotorPin[0], LOW);
+  digitalWrite(rghtMotorPin[1], HIGH);
+  digitalWrite(rghtMotorPin[0], LOW);
+  Serial.println("Left");
+
+
