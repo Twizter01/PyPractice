@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Animated Image</title>
+  <style>
+    /* Define a keyframe animation called "spin" */
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Apply the animation to the image */
+    .animated-image {
+      width: 300px;        /* Adjust the size as needed. */
+      height: 300px;
+      animation: spin 5s linear infinite; /* 5s duration, linear timing, infinite repeat */
+    }
+  </style>
+</head>
+<body>
+  <"C:\\Users\\Twizter\\Desktop\\LOGO ^ SCRIBES\\Roy_Loading.jpg">
+  <img src="your-image.jpg" alt="Animated Image" class="animated-image">
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Animated Image</title>
+  <style>
+    /* Define a keyframe animation called "spin" */
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Apply the animation to the image */
+    .animated-image {
+      width: 300px;        /* Adjust the size as needed. */
+      height: 300px;
+      animation: spin 5s linear infinite; /* 5s duration, linear timing, infinite repeat */
+    }
+  </style>
+</head>
+<body>
+  <!-- Replace 'your-image.jpg' with the actual path or URL of your image -->
+  <img src="your-image.jpg" alt="Animated Image" class="animated-image">
+</body>
+</html>
