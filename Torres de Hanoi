@@ -1,0 +1,109 @@
+import turtle
+import time
+
+
+def draw_poles():
+    """Dibuja los postes de las Torres de Hanói."""
+    turtle.penup()
+    positions = [-200, 0, 200]
+    for x in positions:
+        turtle.goto(x, -100)
+        turtle.pendown()
+        turtle.goto(x, 100)
+        turtle.penup()
+
+def draw_disk(x, y, width, color):
+    """Dibuja un disco en la posición dada."""
+    turtle.goto(x - width / 2, y)
+    turtle.pendown()
+    turtle.fillcolor(color)
+    turtle.begin_fill()
+    for _ in range(2):
+        turtle.forward(width)
+        turtle.left(90)
+        turtle.forward(20)
+        turtle.left(90)
+    turtle.end_fill()
+    turtle.penup()
+
+def move_disk(disk, from_x, to_x):
+    """Anima el movimiento de un disco de un poste a otro."""
+    y = positions[disk]
+    width = disk_sizes[disk]
+    color = colors[disk]
+    
+    # Levantar el disco
+    for i in range(y, 120, 20):
+        turtle.clear()
+        draw_poles()
+        redraw_disks(exclude=disk)
+        draw_disk(from_x, i, width, color)
+        turtle.update()  # Actualizar la pantalla
+        time.sleep(0.05)  # Tiempo reducido para evitar retrasos
+    
+    # Mover horizontalmente
+    step = 20 if from_x < to_x else -20
+    for x in range(from_x, to_x + step, step):
+        turtle.clear()
+        draw_poles()
+        redraw_disks(exclude=disk)
+        draw_disk(x, 120, width, color)
+        turtle.update()  # Actualizar la pantalla
+        time.sleep(0.05)  # Tiempo reducido
+    
+    # Calcular nueva altura en to_x
+    disks_on_to_x = [d for d in range(num_disks) if peg_positions[d] == to_x]
+    if disks_on_to_x:
+        new_y = max(positions[d] for d in disks_on_to_x) + 20
+    else:
+        new_y = -100
+    
+    # Bajar el disco
+    for i in range(120, new_y - 20, -20):
+        turtle.clear()
+        draw_poles()
+        redraw_disks(exclude=disk)
+        draw_disk(to_x, i, width, color)
+        turtle.update()  # Actualizar la pantalla
+        time.sleep(0.05)  # Tiempo reducido
+    
+    # Actualizar posiciones
+    positions[disk] = new_y
+    peg_positions[disk] = to_x
+
+def hanoi(n, from_x, to_x, aux_x):
+    """Algoritmo de Torres de Hanói con animación."""
+    if n == 1:
+        move_disk(n - 1, from_x, to_x)
+    else:
+        hanoi(n - 1, from_x, aux_x, to_x)
+        move_disk(n - 1, from_x, to_x)
+        hanoi(n - 1, aux_x, to_x, from_x)
+
+def redraw_disks(exclude=None):
+    """Redibuja todos los discos excepto el que está en movimiento."""
+    for i in range(num_disks):
+        if i == exclude:
+            continue
+        draw_disk(peg_positions[i], positions[i], disk_sizes[i], colors[i])
+
+# Configuración inicial
+turtle.speed(0)
+turtle.hideturtle()
+turtle.tracer(0, 0)  # Desactivar trazado automático
+background_color=("black") 
+
+num_disks = 4
+disk_sizes = [20 + i * 15 for i in range(num_disks)]  # Tamaños de discos
+positions = [-100 + (num_disks - 1 - i) * 20 for i in range(num_disks)]  # Posiciones iniciales
+peg_positions = [-200] * num_disks  # Todos en el poste izquierdo
+colors = ["red", "blue", "green", "orange"]
+
+draw_poles()
+for i in range(num_disks):
+    draw_disk(-200, positions[i], disk_sizes[i], colors[i])
+turtle.update()  # Mostrar la configuración inicial
+
+time.sleep(1)
+hanoi(num_disks, -200, 200, 0)
+turtle.done()
