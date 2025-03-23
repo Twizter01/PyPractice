@@ -1,0 +1,97 @@
+# Exercise 1.2 [File Extensions]
+file_extension = [".gif",
+                  ".jpg",
+                  ".jpeg",
+                  ".png",
+                  ".pdf",
+                  ".txt",
+                  ".zip"]
+
+media_types = ["image/gif", 
+               "image/jpeg", 
+               "image/jpeg", 
+               "image/png", 
+               "application/pdf", 
+               "text/plain", 
+               "application/zip"]
+
+def media_type():
+    user_input = input("Enter your files name and extension: ")
+    
+    # Check if the input ends with any of our extensions
+    if user_input.endswith(".gif"):
+        print(user_input, ": image/gif")
+    elif user_input.endswith(".jpg"):
+        print(user_input, ": image/jpeg")
+    elif user_input.endswith(".jpeg"):
+        print(user_input, ": image/jpeg")
+    elif user_input.endswith(".png"):
+        print(user_input, ": image/png")
+    elif user_input.endswith(".pdf"):
+        print(user_input, ": application/pdf")
+    elif user_input.endswith(".txt"):
+        print(user_input, ": text/plain")
+    elif user_input.endswith(".zip"):
+        print(user_input, ": application/zip")
+    else:
+        print("File not recognized")
+
+media_type()
+
+
+
+def main():
+    # Dictionary mapping extensions to media types
+    file_types = {
+        ".gif": "image/gif",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".pdf": "application/pdf",
+        ".txt": "text/plain",
+        ".zip": "application/zip"
+    }
+    
+    # Get filename from user and convert to lowercase
+    filename = input("Enter your file name: ").strip().lower()
+    
+    # Check each extension and print corresponding media type
+    for ext, media_type in file_types.items():
+        if filename.endswith(ext):
+            print(media_type)
+            return
+    
+    # If no match found
+    print("No file extension found with that name")
+
+if __name__ == "__main__":
+    main()
+
+
+def main():
+
+    file_types = {
+        ".gif": "image/gif",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".pdf": "application/pdf",
+        ".txt": "text/plain",
+        ".zip": "application/zip"
+    }
+
+    user_input = input("How can I help you? ")
+    file_extension = ""
+    for ext in media_types:
+        if user_input.endswith(ext) and file_name.count('.') == 1:
+            file_extension = ext
+            break
+    if file_extension:
+        print(f"{user_input},{file_types[file_extension]}")
+    else:
+        print("File not recognized")
+
+
+
+    if __name__ == "__main__":
+        main()
