@@ -1,0 +1,83 @@
+import tkinter as tk
+from tkinter import messagebox
+from PIL import Image, ImageTk
+
+# Function to calculate and display the results
+def calcular_salario():
+    # Get the values from the user input fields
+    cedula = entry_cedula.get()
+    try:
+        salarioBasico = float(entry_salarioBasico.get())
+        horasExtrasDiurnas = int(entry_horasExtrasDiurnas.get())
+        horasExtrasNocturnas = int(entry_horasExtrasNocturnas.get())
+    except ValueError:
+        messagebox.showerror("Error", "Por favor ingrese valores válidos.")
+        return
+    
+    # Calculate the net salary
+    salarioNeto = salarioBasico + (horasExtrasDiurnas * 4500) + (horasExtrasNocturnas * 6200)
+    
+    # Display the net salary
+    label_resultado.config(text=f"Salario Neto: {salarioNeto:.2f}")
+    
+    # Check if the salary qualifies for a subsidy
+    if salarioNeto < 1000000:
+        subsidio = 75000
+        label_subsidio.config(text=f"Se le asigna un subsidio de: {subsidio}")
+    else:
+        label_subsidio.config(text="No se le asigna subsidio.")
+
+# Create the main window
+root = tk.Tk()
+root.title("Cálculo de Salario")
+
+# Set the size of the window (you can adjust the size)
+root.geometry("500x400")
+
+# Load the Gengar image with transparency (use any image file path for the background)
+image_path = "Creature of veil.png"  # Replace with the path to your Gengar image
+img = Image.open(image_path)
+img = img.resize((500, 400), Image.Resampling.LANCZOS)  # Resize to fit the window size
+bg_image = ImageTk.PhotoImage(img)
+
+# Set the background image
+background_label = tk.Label(root, image=bg_image)
+background_label.place(relwidth=1, relheight=1)
+
+# Font for all labels and buttons
+font = ('Helvetica', 12, 'bold')
+
+# Create and place widgets with customized style on top of the image
+label_cedula = tk.Label(root, text="Ingrese la cédula:", bg="#2A084D", fg="white", font=font)
+label_cedula.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+entry_cedula = tk.Entry(root, font=font)
+entry_cedula.grid(row=0, column=1, padx=10, pady=10)
+
+label_salarioBasico = tk.Label(root, text="Ingrese el salario básico:", bg="#2A084D", fg="white", font=font)
+label_salarioBasico.grid(row=1, column=0, padx=10, pady=10, sticky="w")
+entry_salarioBasico = tk.Entry(root, font=font)
+entry_salarioBasico.grid(row=1, column=1, padx=10, pady=10)
+
+label_horasExtrasDiurnas = tk.Label(root, text="Ingrese las horas extras diurnas:", bg="#2A084D", fg="white", font=font)
+label_horasExtrasDiurnas.grid(row=2, column=0, padx=10, pady=10, sticky="w")
+entry_horasExtrasDiurnas = tk.Entry(root, font=font)
+entry_horasExtrasDiurnas.grid(row=2, column=1, padx=10, pady=10)
+
+label_horasExtrasNocturnas = tk.Label(root, text="Ingrese las horas extras nocturnas:", bg="#2A084D", fg="white", font=font)
+label_horasExtrasNocturnas.grid(row=3, column=0, padx=10, pady=10, sticky="w")
+entry_horasExtrasNocturnas = tk.Entry(root, font=font)
+entry_horasExtrasNocturnas.grid(row=3, column=1, padx=10, pady=10)
+
+# Button to trigger the calculation
+btn_calcular = tk.Button(root, text="Calcular Salario", command=calcular_salario, font=font, bg="#8E44AD", fg="white", relief="raised")
+btn_calcular.grid(row=4, column=0, columnspan=2, pady=20)
+
+# Labels for displaying results
+label_resultado = tk.Label(root, text="Salario Neto:", bg="#5E2A84", fg="white", font=font)
+label_resultado.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
+
+label_subsidio = tk.Label(root, text="Subsidio:", bg="#5E2A84", fg="white", font=font)
+label_subsidio.grid(row=6, column=0, columnspan=2, padx=10, pady=10)
+
+# Start the Tkinter event loop
+root.mainloop()
