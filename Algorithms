@@ -1,0 +1,281 @@
+
+
+# Example 1: Bubble Sort Algorithm
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if arr[j] > arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+    return arr
+
+# Example 2: Binary Search Algorithm
+def binary_search(arr, target):
+    low, high = 0, len(arr) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return -1
+
+# Example 3: Factorial using Recursion
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial(n - 1)
+
+# Example 4: Fibonacci Sequence using Iteration
+def fibonacci(n):
+    fib_sequence = [0, 1]
+    for i in range(2, n):
+        fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])
+    return fib_sequence[:n]
+
+# Example 5: Linear Search Algorithm
+def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+    return -1
+
+# Example 6: GCD using Euclid's Algorithm
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+# Example 7: Quick Sort Algorithm
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
+
+# Example 8: Prime Number Check
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+# Example 9: Merge Sort Algorithm
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left_half = merge_sort(arr[:mid])
+    right_half = merge_sort(arr[mid:])
+    return merge(left_half, right_half)
+
+# Helper function for Merge Sort
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+# Example 10: Counting Sort Algorithm
+def counting_sort(arr):
+    max_val = max(arr) + 1
+    count = [0] * max_val
+    for num in arr:
+        count[num] += 1
+    sorted_arr = []
+    for i, cnt in enumerate(count):
+        sorted_arr.extend([i] * cnt)
+    return sorted_arr
+
+# Example 11: Dijkstra's Algorithm for Shortest Path
+import heapq
+def dijkstra(graph, start):
+    queue = [(0, start)]
+    distances = {node: float('infinity') for node in graph}
+    distances[start] = 0
+    while queue:
+        current_distance, current_node = heapq.heappop(queue)
+        if current_distance > distances[current_node]:
+            continue
+        for neighbor, weight in graph[current_node].items():
+            distance = current_distance + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(queue, (distance, neighbor))
+    return distances
+
+# Example 12: Depth-First Search (DFS) Algorithm
+def dfs(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)
+    return visited
+
+# Example 13: Breadth-First Search (BFS) Algorithm
+from collections import deque
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    while queue:
+        vertex = queue.popleft()
+        for neighbor in graph[vertex]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return visited
+
+# Example 14: Knapsack Problem (0/1 Knapsack)
+def knapsack(weights, values, capacity):
+    n = len(values)
+    dp = [[0 for _ in range(capacity + 1)] for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for w in range(capacity + 1):
+            if weights[i - 1] <= w:
+                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1])
+            else:
+                dp[i][w] = dp[i - 1][w]
+    return dp[n][capacity]
+
+# Example 15: String Reversal
+def reverse_string(s):
+    return s[::-1]  
+
+# Example 16: Palindrome Check
+def is_palindrome(s):
+    return s == s[::-1]
+
+# Example 17: Anagram Check
+def are_anagrams(s1, s2):
+    return sorted(s1) == sorted(s2)
+
+# Example 18: Levenshtein Distance (Edit Distance)
+def levenshtein_distance(s1, s2):
+    if len(s1) < len(s2):
+        return levenshtein_distance(s2, s1)
+    if len(s2) == 0:
+        return len(s1)
+    previous_row = range(len(s2) + 1)
+    for i, c1 in enumerate(s1):
+        current_row = [i + 1]
+        for j, c2 in enumerate(s2):
+            insertions = previous_row[j + 1] + 1
+            deletions = current_row[j] + 1
+            substitutions = previous_row[j] + (c1 != c2)
+            current_row.append(min(insertions, deletions, substitutions))
+        previous_row = current_row
+    return previous_row[-1]
+
+# Example 19: Merge Intervals
+def merge_intervals(intervals):
+    if not intervals:
+        return []
+    intervals.sort(key=lambda x: x[0])
+    merged = [intervals[0]]
+    for current in intervals[1:]:
+        last_merged = merged[-1]
+        if current[0] <= last_merged[1]:
+            last_merged[1] = max(last_merged[1], current[1])
+        else:
+            merged.append(current)
+    return merged
+
+# Example 20: Rotate Array
+def rotate_array(arr, k):
+    n = len(arr)
+    k = k % n
+    return arr[-k:] + arr[:-k]
+
+# Example 21: Find the Missing Number in an Array
+def find_missing_number(arr, n):
+    total = n * (n + 1) // 2
+    return total - sum(arr) 
+
+# Example 22: Find the First Non-Repeating Character in a String
+def first_non_repeating_char(s):
+    char_count = {}
+    for char in s:
+        char_count[char] = char_count.get(char, 0) + 1
+    for char in s:
+        if char_count[char] == 1:
+            return char
+    return None
+
+# Example 23: Count Vowels in a String
+def count_vowels(s):
+    vowels = set('aeiouAEIOU')
+    return sum(1 for char in s if char in vowels)
+
+# Example 24: Count Consonants in a String
+def count_consonants(s):
+    vowels = set('aeiouAEIOU')
+    return sum(1 for char in s if char.isalpha() and char not in vowels)
+
+# Example 25: Check if Two Strings are Rotations of Each Other
+def are_rotations(s1, s2):
+    if len(s1) != len(s2):
+        return False
+    temp = s1 + s1
+    return s2 in temp
+
+# Example 26: Find the Longest Common Prefix in an Array of Strings
+def longest_common_prefix(strs):
+    if not strs:
+        return ""
+    prefix = strs[0]
+    for s in strs[1:]:
+        while not s.startswith(prefix):
+            prefix = prefix[:-1]
+            if not prefix:
+                return ""
+    return prefix
+
+# Example 27: Find the Intersection of Two Arrays
+def intersection(arr1, arr2):
+    return list(set(arr1) & set(arr2))
+
+# Example 28: Find the Union of Two Arrays
+def union(arr1, arr2):
+    return list(set(arr1) | set(arr2))
+
+# Example 29: Check if a String is a Subsequence of Another String
+def is_subsequence(s, t):
+    it = iter(t)
+    return all(char in it for char in s)    
+
+# Example 30: Find the Longest Palindromic Substring
+def longest_palindromic_substring(s):
+    def expand_around_center(left, right):
+        while left >= 0 and right < len(s) and s[left] == s[right]:
+            left -= 1
+            right += 1
+        return right - left - 1
+
+    start, end = 0, 0
+    for i in range(len(s)):
+        len1 = expand_around_center(i, i)
+        len2 = expand_around_center(i, i + 1)
+        max_len = max(len1, len2)
+        if max_len > end - start:
+            start = i - (max_len - 1) // 2
+            end = i + max_len // 2
+    return s[start:end + 1]
+
