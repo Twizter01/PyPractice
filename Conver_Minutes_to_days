@@ -1,0 +1,15 @@
+def convert_minutes_to_days():
+    # Prompt the user for input
+    minutes = int(input("Enter the number of minutes: "))
+    
+    # Calculate days and hours
+    days = minutes / 1440  # 1440 minutes = 1 day
+    hours = days * 24  # 1 day = 24 hours
+    
+    # Display the results
+    print(f"{minutes} minutes is approximately {days:.2f} days or {hours:.2f} hours.")
+
+# Call the function
+convert_minutes_to_days()
+
+
