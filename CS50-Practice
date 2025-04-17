@@ -1,0 +1,15 @@
+def main():
+    items_so_far = []  # Initialize the list to keep track of items
+    try:
+        while True:  # Infinite loop until EOFError is raised
+            user_item = input("Item: ")  # Take user input
+            if user_item not in items_so_far:  # Check if item exists in the list
+                items_so_far.append(user_item)  # Add the new item to the list
+                print(f"{items_so_far.count(user_item)}: {user_item.upper()}")
+            else:
+                raise EOFError
+    except EOFError:
+        print("\nEnd of input detected. Program exiting...")  # Handle EOFError and exit gracefully
+
+if __name__ == "__main__":
+    main()    
