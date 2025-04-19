@@ -1,0 +1,154 @@
+body {
+    
+  background: radial-gradient(circle, rgb(18, 2, 56), rgb(83, 30, 153), rgb(145, 84, 243)); /* Circular gradient */
+  font-family: 'Bungee Spice', cursive;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  
+  
+}
+
+.head {
+    width: 100%;
+    background-color: #e211b542;
+    color: #842ee6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    border: 0.1px solid #ff00ff; /* Adding a neon magenta border */
+  }
+  
+  .head img {
+    width: 50px;
+    margin-right: 10px;
+  }
+  
+  .head h1 {
+    font-size: 24px;
+    margin: 0;
+  }
+  
+  .board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+  }
+  
+  .column {
+    /* width: 30%; */
+    width: calc(100% - 30px);
+    max-width: 400px;
+    margin: 10px;
+    background-color: linear-gradient(to right, #00fff0, #ff00ff, #8000ff); /* Neon turquoise, magenta, and purple hues */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px 5px rgba(255, 0, 255, 0.6), 0 0 10px 2px rgba(0, 255, 240, 0.8); /* Multi-layered neon glow effect */
+    border: 2px solid #ff00ff; /* Adding a neon magenta border */
+  }
+  
+  .column h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .task-input {
+    width: 60%;
+    padding: 8px;
+    border: 1px solid #7b1694;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .task {
+    background-color: #2a0d77;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: move;
+  }
+  
+  .delete-btn {
+    float: right;
+    cursor: pointer;
+  }
+  
+  .add-task-btn {
+    background-color: #39bfc4;
+    border: none;
+    color: rgb(15, 141, 150);
+    /* Adjust padding to make 
+    the button smaller */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    /* Decrease font size */
+    border-radius: 5px;
+    /* Adjust border radius 
+    for a softer look */
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10PX;
+    padding-left: 10PX;
+    padding-right: 10PX;
+    transition: background-color 0.3s;
+    font-size: medium;
+    font-family: fantasy;
+    font-weight: 600;
+    color: #2a0d77;
+  }
+  
+  .add-task-btn:hover {
+    transition: cubic-bezier(55,15,15);
+  }
+
+  .add-task-btn:active {
+    background-color: rgb(15, 141, 150);
+    color:#39bfc4;
+  }
+  
+  #todo .task {
+    background-color: #b3e5fc;
+    /* Light blue */
+  }
+  
+  #in-progress .task {
+    background-color: #ffcdd2;
+    /* Light pink */
+  }
+  
+  #done .task {
+    background-color: #c8e6c9;
+    /* Light green */
+  }
+  
+  .task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #9ee717;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    cursor: move;
+  }
+  
+  .delete-btn {
+    float: right;
+  
+    cursor: pointer;
+  }
+  
+  .tasks-in-btn {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 3px;
+  }
