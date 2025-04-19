@@ -1,0 +1,14 @@
+user_items = {}
+while True:
+    try:
+        item = input("").lower().strip()
+        if item in user_items:
+            user_items[item] += 1
+        else:
+            user_items[item] = 1
+    except EOFError:
+        for item in sorted(user_items):
+            amount = user_items[item]  # Retrieve the count for the current item
+            print(f"{amount} {item.upper()}")
+        break
+
