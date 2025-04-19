@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban-Board Para Descerebrados</title>
+</head>
+
+<body>
+    <div class="head">
+        <h1>Time To Get Busy!</h1>
+    </div>
+    <div class="board">
+        <div class="column" id="todo">
+            <h2>Todo</h2>
+            <hr />
+            <div class="tasks-in-btn">
+                <input 
+                type="text" 
+                id="taskInput" 
+                class="task-input" 
+                placeholder="Input task..." />
+                <button class="add-task-btn" onclick="addTask('todo')">Add Task</button>
+            </div>
+            <div class="task-container"></div>
+        </div>
+        <div class="column" id="in-progress">
+            <h2>In Progress</h2>
+            <hr />
+            <div class="task-container" ondrop="console.log('ondrop')" ondragover="console.log('ondragover')"></div>
+        </div>
+        <div class="column" id="done" ondrop="drop(event, 'done')" ondragover="allowDrop(event)">
+            <h2>Done</h2>
+            <hr />
+            <div class="task-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // Get Items from local storage key of 'tasks'
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        // Render tasks on DOMContentLoaded
+        document.addEventListener("DOMContentLoaded", renderTasks);
+
+        function renderTasks() {
+            const columns = ['todo', 'in-progress', 'done'];
+            columns.forEach(columnId => {
+                console.log('columnId =', columnId);
+                // Additional logic to render tasks can go here
+            });
+            console.log('DOM CONTENT IS LOADED');
+        }
+
+        function addTask(columnId) {
+            console.log(`Adding task to column: ${columnId}`);
+            // Placeholder logic for adding tasks
+        }
+    </script>
+</body>
+
+</html>
