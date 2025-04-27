@@ -1,0 +1,76 @@
+# First code attempt
+months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+]
+
+# Prompt the user to enter a date
+user_anno_domini_input = input("Enter your date here (MM/DD/YYYY): ")
+
+# Validate and process the input
+try:
+    # Split input and reverse the order (e.g., YYYY/MM/DD)
+    month, day, year = user_anno_domini_input.split("/")
+    reversed_date = f"{year}/{day}/{month}"  # Custom format after reversing
+    print(f"Your new Greogorian date is:",reversed_date)
+except ValueError:
+    print("Invalid date format. Please use MM/DD/YYYY format.")
+
+
+#>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<>.<
+
+# Second code attempt
+
+months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+]
+
+def parse_date(input_date):
+    # Check for numeric date format (e.g., 9/8/1636)
+    if "/" in input_date:
+        parts = input_date.split("/")
+        if len(parts) == 3:
+            month, day, year = parts
+            if month.isdigit() and day.isdigit() and year.isdigit():
+                month, day, year = int(month), int(day), int(year)
+                if 1 <= month <= 12 and 1 <= day <= 31:  # Validate Ranges
+                    return (f"{year:04d}-{month:02d}-{day:02d}")
+
+    # Check for textual month format (e.g., September 8, 1636)
+    for i, month in enumerate(months, start=1):
+        if month in input_date:
+            parts = input_date.replace(",", "").split()
+            if len(parts) == 3:
+                month_text, day, year = parts
+                if day.isdigit() and year.isdigit():
+                    month = i
+                    day, year = int(day), int(year)
+                    if 1 <= day <= 31:  # Validate day range
+                        return (f"{year:04d}-{month:02d}-{day:02d}")
+
+    return None  # Invalid date format
+
+def main():
+    while True:
+        user_date = input("Enter your date here (e.g., 9/8/1636 or September 8, 1636): ")
+        formatted_date = parse_date(user_date)
+        if formatted_date:
+            print(formatted_date)
+            break
+        else:
+            print("Invalid date format. Please try again.")
+
+if __name__ == "__main__":
+    main() 
+
