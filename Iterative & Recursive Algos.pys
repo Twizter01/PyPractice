@@ -1,0 +1,46 @@
+""" RECURSION => A FUNCTION THAT CALLS ITSELF FROM WITHIN
+    HELPS TO VISUALIZE A COMPLEX PROBLEM INTO BASIC STEPS
+    PROBLEMS CAN BE SOLVED MORE EASILY ITERATIVELY OR RECURSIVELY
+    ITERATIVE = FASTER / COMPLEX
+    RECURSIVE = SLOWER / SIMPLER """
+
+
+# Iterative Approach
+
+def walk(steps):
+    for step in range(1, steps + 1):
+        print(f"You are on step #{step}")
+
+walk(steps=100)
+
+
+# Recursive Approach
+
+def walk(steps):
+    if steps==0:
+        return
+    walk(steps - 1)
+    print(f"You are on step #{steps}")
+
+walk(100)
+
+
+# Iterative Approach in order to find the factorial of x number
+
+def factorial(x):
+    result=1
+    if x > 0:
+        for y in range(1, x + 1):
+            result *= y
+        return result
+print(factorial(10))       
+
+
+# Recursive Approach same exercise above
+
+def factorial(x):
+    if x == 1:
+        return 1
+    else:
+        return x * factorial(x - 1)
+print(factorial(10))
